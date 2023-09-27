@@ -1,30 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private GameObject _bulletPrefab;
+    [SerializeField] private GameObject _weaponPrefab;
     [SerializeField] private GameObject _bulletSpawn;
     [SerializeField] private float _speed;
+    [SerializeField] private float _speedRotate = 100;
+    [SerializeField] private int _hitPoint = 100;
+    private int _weaponPoint = 0;
     private Vector3 _position = Vector3.zero;
-    private bool _isFier;
-    private void Awake()
-    {
-
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-
-        
-    }
-
-    // Update is called once per frame
+    private bool _isFierLeft;
+    private bool _isFierRight;
     void Update()
     {
-        _isFier = Input.GetMouseButtonDown(0);
-     
+        _isFierLeft = Input.GetMouseButtonDown(0);
+        _isFierRight = Input.GetMouseButtonDown(1);
+
     }
 
     void FixedUpdate()
@@ -32,14 +27,30 @@ public class Player : MonoBehaviour
         _position.x = Input.GetAxis("Horizontal");
         _position.z = Input.GetAxis("Vertical");
         transform.Translate(_position*_speed*Time.fixedDeltaTime);
-        if (_isFier)
+        transform.Rotate(Vector3.up,Input.GetAxis("Mouse X") * _speedRotate * Time.fixedDeltaTime);
+        transform.Find("Spawn_Fire").transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * _speedRotate * Time.fixedDeltaTime);
+        if (_isFierLeft)
         {
-            _isFier = false;
+            _isFierLeft = false;
             Instantiate(_bulletPrefab, new Vector3 (_bulletSpawn.transform.position.x+1, _bulletSpawn.transform.position.y, _bulletSpawn.transform.position.z+2), Quaternion.identity);
         }
+        if (_weaponPoint > 0)
+        {
+            if (_isFierRight)
+            {
+                --_weaponPoint;
+                _isFierRight = false;
+                Instantiate(_weaponPrefab, new Vector3(_bulletSpawn.transform.position.x + 1,
+                    _bulletSpawn.transform.position.y, _bulletSpawn.transform.position.z + 1), Quaternion.identity);
+                print("Снаярядов:" + _weaponPoint);
+            }
+        }
     }
-    void LateUpdate()
+    public void WeaponEquip() 
     {
+        _weaponPoint= _weaponPoint + 100;
+        print("Выстрелов:"+ _weaponPoint);
 
     }
+ 
 }

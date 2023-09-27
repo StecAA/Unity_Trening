@@ -652,6 +652,8 @@ GameObject:
   - component: {fileID: 5998674135650300957}
   - component: {fileID: 5998674135650300956}
   - component: {fileID: 6518646907375341210}
+  - component: {fileID: 5816872720544724935}
+  - component: {fileID: -3634876160636977617}
   m_Layer: 0
   m_Name: PreEnemy
   m_TagString: EnemyTag
@@ -674,6 +676,7 @@ Transform:
   - {fileID: 5998674137258446039}
   - {fileID: 5998674137258446229}
   - {fileID: 5998674137258445859}
+  - {fileID: 3122038031013893071}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -186.377, z: 0}
@@ -789,7 +792,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5998674137258348565}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -807,6 +810,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 10
+  _speed: 3
+  _weaponPrefab: {fileID: 5550844889926865888, guid: 22458c29efba607438a9d763b400473c, type: 3}
+  _bulletSpawn: {fileID: 8367220314056240221}
+--- !u!65 &5816872720544724935
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5998674137258348565}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.6, z: 0}
+--- !u!65 &-3634876160636977617
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5998674137258348565}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 25, y: 25, z: 25}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5998674137258348567
 GameObject:
   m_ObjectHideFlags: 0
@@ -7250,4 +7282,35 @@ Transform:
   - {fileID: 5998674137258445943}
   m_Father: {fileID: 5998674137258445941}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8367220314056240221
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3122038031013893071}
+  m_Layer: 0
+  m_Name: Spawn_Fire
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3122038031013893071
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8367220314056240221}
+  m_LocalRotation: {x: -0, y: 0.9984519, z: -0, w: -0.05562301}
+  m_LocalPosition: {x: 0.27, y: 0.722, z: 1.08}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5998674137258446325}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
