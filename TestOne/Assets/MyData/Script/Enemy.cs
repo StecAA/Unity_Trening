@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.GraphicsBuffer;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
@@ -10,56 +8,70 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int _speed;
     [SerializeField] private GameObject _weaponPrefab;
     [SerializeField] private GameObject _bulletSpawn;
-    
-    
+    [SerializeField] private float _fireTime = 1f;
+    [SerializeField] private GameObject _target;
+    public Transform[] _wayPoints;
+    private float _timeCounter;
+    private int _currentWayPointIndex;
+    private NavMeshAgent _agent;
+    private void Awake()
+    {
+        _agent = GetComponent<NavMeshAgent>();
+    }
+    private void FixedUpdate()
+    {
+        if (!_agent.pathPending && _agent.remainingDistance < 0.5f) GotoNextPoint();
+
+        //if (_agent.remainingDistance < _agent.stoppingDistance)
+        //{
+        //    _currentWayPointIndex = (_currentWayPointIndex+1) % _wayPoint.Length;
+        //    _agent.SetDestination(_wayPoint[_currentWayPointIndex].position);
+        //}
+    }
+    private void GotoNextPoint()
+    {
+        if (_wayPoints.Length == 0) return;
+        _agent.destination = _wayPoints[_currentWayPointIndex].position;
+        _currentWayPointIndex = (_currentWayPointIndex + 1) % _wayPoints.Length;
+
+    }
     public void Hurt(int damage)
-    { 
+    {
         _health -= damage;
         if (_health <= 0)
         {
             Die();
-            print("«Ямете кудасаи:" + damage);
         }
     }
     private void Die()
     {
         Destroy(gameObject);
     }
-    private void FixedUpdate()
-    {
-        //transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, _speed * Time.deltaTime );
-        //  transform.rotation = 
-        //  InvokeRepeating("SpawnBullit", 2, 2);
 
-
-
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-       
-        if (other.gameObject.CompareTag("Player")) {
-            Debug.Log("Поподание в Тригер" + other);
-            StartCoroutine(routine: SpawnBullit());
-        }
-    }
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.TryGetComponent(out Player player))
         {
-            // SpawnBullit();
             Run(other.gameObject);
-            
+            if (_timeCounter < _fireTime)
+            {
+                _timeCounter += Time.fixedDeltaTime;
+                return;
+            }
+            else
+            {
+                _timeCounter = 0;
+                StartCoroutine(routine: SpawnBullet());
+            }
         }
     }
-    private IEnumerator SpawnBullit()
-    { 
-          for (int _counter = 0; _counter < 5; ++_counter)
-        { 
-            yield return new WaitForSeconds(1f);
-            Instantiate(_weaponPrefab, new Vector3(_bulletSpawn.transform.position.x + 1, _bulletSpawn.transform.position.y, _bulletSpawn.transform.position.z + 1), Quaternion.identity);
-            Debug.Log("Выстрел " + _counter);
-        }
-
+    private IEnumerator SpawnBullet()
+    {
+        yield return new WaitForSeconds(1f);
+        Vector3 _position = new Vector3(_bulletSpawn.transform.position.x,
+            _bulletSpawn.transform.position.y, _bulletSpawn.transform.position.z);
+        Instantiate(_weaponPrefab, _position, Quaternion.identity);
+        Debug.Log("Выстрел ");
     }
     public void Run(GameObject _target)
     {
