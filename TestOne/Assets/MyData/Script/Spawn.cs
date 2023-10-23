@@ -9,7 +9,7 @@ public class Spawn : MonoBehaviour
         Vector3 _position = this.transform.position;
         while (_counter != _caunt)
         {
-            Instantiate(Enemy, new Vector3(_position.y + (_counter * 2.0f), _position.x, _position.z), Quaternion.identity);
+            Instantiate(Enemy, new Vector3(_position.y + _counter, _position.x , _position.z), Quaternion.identity);
             ++_counter;
         }
 

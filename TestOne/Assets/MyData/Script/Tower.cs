@@ -24,9 +24,8 @@ public class Tower : MonoBehaviour
         {
             _target = null;
         }
-
     }
-    private void FixedUpdate()
+    private void Update()
     {
         if (_target == null) return;
         _direction = _target.position - _head.position;
@@ -43,18 +42,12 @@ public class Tower : MonoBehaviour
             _timeCounter = 0;
             StartCoroutine(routine: SpawnBullet());
         }
-
-
-
     }
     private IEnumerator SpawnBullet()
     {
         yield return new WaitForSeconds(1f);
-
-        Instantiate(_weaponPrefab, new Vector3(_bulletSpawn.transform.position.x, 
-            _bulletSpawn.transform.position.y, _bulletSpawn.transform.position.z), Quaternion.identity);
+        Instantiate(_weaponPrefab, new Vector3(_bulletSpawn.transform.position.x,
+        _bulletSpawn.transform.position.y, _bulletSpawn.transform.position.z), Quaternion.identity);
         Debug.Log("Выстрел");
-
-
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 public class Enemy : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private GameObject _bulletSpawn;
     [SerializeField] private float _fireTime = 1f;
     [SerializeField] private GameObject _target;
-    public Transform[] _wayPoints;
+    [SerializeField] private Transform[] _wayPoints;
     private float _timeCounter;
     private int _currentWayPointIndex;
     private NavMeshAgent _agent;
@@ -18,19 +19,14 @@ public class Enemy : MonoBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
     }
-    private void FixedUpdate()
+    private void Update()
     {
+        if (_wayPoints.Length == 0) return;
         if (!_agent.pathPending && _agent.remainingDistance < 0.5f) GotoNextPoint();
-
-        //if (_agent.remainingDistance < _agent.stoppingDistance)
-        //{
-        //    _currentWayPointIndex = (_currentWayPointIndex+1) % _wayPoint.Length;
-        //    _agent.SetDestination(_wayPoint[_currentWayPointIndex].position);
-        //}
     }
     private void GotoNextPoint()
     {
-        if (_wayPoints.Length == 0) return;
+
         _agent.destination = _wayPoints[_currentWayPointIndex].position;
         _currentWayPointIndex = (_currentWayPointIndex + 1) % _wayPoints.Length;
 
@@ -47,7 +43,6 @@ public class Enemy : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
     private void OnTriggerStay(Collider other)
     {
         if (other.TryGetComponent(out Player player))
@@ -69,13 +64,14 @@ public class Enemy : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         Vector3 _position = new Vector3(_bulletSpawn.transform.position.x,
-            _bulletSpawn.transform.position.y, _bulletSpawn.transform.position.z);
+        _bulletSpawn.transform.position.y, _bulletSpawn.transform.position.z);
         Instantiate(_weaponPrefab, _position, Quaternion.identity);
-        Debug.Log("Выстрел ");
     }
     public void Run(GameObject _target)
     {
-        transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, _speed * Time.deltaTime);
+        Debug.Log("Бег" + _target.transform.position);
+        _agent.destination = _target.transform.position;
+        Debug.Log("1" + _agent.destination);
         transform.Rotate(Vector3.up, _speed * Time.fixedDeltaTime);
     }
 }
